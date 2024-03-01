@@ -1,7 +1,7 @@
 import weaviate
 import weaviate.classes as wvc
 
-CLASS_NAME = "Experience"
+COLLECTION_NAME = "Experience"
 
 
 def create_collection_schema(client):
@@ -11,7 +11,7 @@ def create_collection_schema(client):
     :type client: WeaviateClient (V4)
     """
     client.collections.create(
-        name=CLASS_NAME,
+        name=COLLECTION_NAME,
         vectorizer_config=wvc.config.Configure.Vectorizer.text2vec_openai(
             vectorize_collection_name=False
         ),
@@ -30,14 +30,21 @@ def create_collection_schema(client):
                 vectorize_property_name=False,
                 tokenization=wvc.config.Tokenization.WORD,
             ),
+            wvc.config.Property(
+                name="exp_id",
+                data_type=wvc.config.DataType.INT,
+            ),
         ],
     )
 
 
 client = weaviate.connect_to_local()
 try:
+    client.collections.delete(COLLECTION_NAME)
+    print(f"Schema {COLLECTION_NAME} deleted.")
+
     create_collection_schema(client)
-    print("Schema created successfully")
+    print(f"Schema {COLLECTION_NAME} created successfully")
 
 except Exception as e:
     print("Error: " + e)

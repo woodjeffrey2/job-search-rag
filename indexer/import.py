@@ -6,7 +6,7 @@ import yaml
 import uuid
 
 INPUT_FILE = "./indexer/data/experiences.yml"
-CLASS_NAME = "Experience"
+COLLECTION_NAME = "Experience"
 
 client = weaviate.connect_to_local()
 client.timeout_config = (3, 200)
@@ -22,9 +22,15 @@ def add_experiences(data):
         for index, row in data.iterrows():
             exp = row.to_dict()
             print("Adding experience:", exp)
+
+            exp_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, row["job"] + str(row["exp_id"])))
             batch.add_object(
-                properties=row.to_dict(), collection=CLASS_NAME, uuid=uuid.uuid4()
+                properties=exp, collection=COLLECTION_NAME, uuid=exp_uuid,
             )
+
+        if batch.number_errors > 0:
+            print(f"Errors: {batch.number_errors}")
+            print("Failed Objects: ", batch.failed_objects)
 
     message = str(index + 1) + " / " + str(data.shape[0]) + " items imported"
     print(message)
@@ -36,10 +42,7 @@ experiences_data = yaml_data.get("experiences", [])
 df = pd.DataFrame(experiences_data)
 
 try:
-    add_experiences(df, batch_size=99, debug_mode=True)
-
-except Exception as e:
-    print("Error: " + e)
+    add_experiences(df)
 
 finally:
     client.close()
