@@ -1,0 +1,57 @@
+experiences:
+  - description: Helped grow a newly formed Varsity Tutors for Schools team from a small experiment to help address the COVID learning gap  into one of the  major pillars of the business, providing learning resources for over 2 million students today.
+    job: varsity
+  - description: Designed core systems and data architecture.
+    job: varsity
+  - description: Mentored junior developers and led major initiatives.
+    job: varsity
+  - description: Worked closely with leadership from other teams on company-wide initiatives and cross-team efforts.
+    job: varsity
+  - description: Collaborated with the AI team on a R.A.G. approach for identifying curriculum-specific skills covered in recorded tutoring sessions.
+    job: varsity
+  - description: Early Engineering team member who helped lead a tiny startup through a period of rapid growth and scaling  to unicorn status.
+    job: uniteus
+  - description: Subject Matter Expert (SME) for authentication, SSO, and user provisioning.
+    job: uniteus
+  - description: Designed, implemented, and integrated OAuth2, SAML SSO, SAML JIT and SCIM user provisioning systems for syncing hundreds of thousands of external users across domains.
+    job: uniteus
+  - description: Mentored engineers, led technical discussions, and designed performant production systems.
+    job: uniteus
+  - description: Built AWS Lambda architecture for automated EHR data transfer.
+    job: uniteus
+  - description: Worked with MD and PHD PIs to build applications for Biomedical Informatics research including Breast Cancer risk calculation, patient education, augmented reality,  and wearable devices.
+    job: columbia
+  - description: Collaborated with Data Scientists to analyze study data.
+    job: columbia
+  - description: Worked with MDs and PHDs to build  patient and clinician systems for research studies.
+    job: hopkins
+  - description: Implemented machine learning algorithms and trained models for static data analysis and real-time use in systems.
+    job: hopkins
+  - description: Collaborated with Data Scientists to analyze study data.
+    job: hopkins
+  - description: Wrote articles for publication submissions and participated in the peer review process
+    job: hopkins
+  - description: Presented research at conferences across the U.S., Europe, and South America.
+    job: hopkins
+  - description: Lead search for a company-wide API documentation solution.
+    job: varsity
+  - description: Helped establish Kafka eventing standards.
+    job: varsity
+  - description: Designed AWS Step Functions orchestration workflow to automate error-prone manual processes.
+    job: varsity
+  - description: Designed and implemented CDC Outbox pattern for data extraction using Kafka and Debezium.
+    job: varsity
+  - description: Established team standards for REST and GraphQL API design.
+    job: varsity
+  - description: Created CI/CD pipelines for services and established best practices.
+    job: varsity
+  - description: Established best practices for unit and integration testing.
+    job: varsity
+  - description: Started a push towards integration testing serverless applications with ephemeral stacks instead of local emulation.
+    job: varsity
+  - description: Designed alerting and monitoring architecture for AWS RDS instances and Aurora Clusters
+    job: varsity
+  - description: Worked with Kaiser Permanente leadership and solutions architects to design an integration to provision and sync 600k users.
+    job: uniteus
+  - description: Worked with Epic to pilot and provide feedback on a new API for integrating with social determinants of health platforms and provide bi-directional ref.
+    job: uniteus
