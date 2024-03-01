@@ -1,1 +1,2 @@
-weaviate-client>=4.4.4
+weaviate-client>=4.5
+pandas>=2.2

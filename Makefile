@@ -5,5 +5,9 @@ local-backup:
 	-d '{"id": "$(shell date +%Y%m%d%H%M%S)"}' \
 	http://localhost:8080/v1/backups/filesystem
 
-init-env ie:
+.PHONY: env-init ei env-activate ea
+env-init ei:
+	python -m venv .venv
+
+env-activate ea:
 	source .venv/bin/activate
