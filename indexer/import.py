@@ -23,9 +23,13 @@ def add_experiences(data):
             exp = row.to_dict()
             print("Adding experience:", exp)
 
-            exp_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, row["job"] + str(row["exp_id"])))
+            exp_uuid = str(
+                uuid.uuid5(uuid.NAMESPACE_DNS, row["job"] + str(row["exp_id"]))
+            )
             batch.add_object(
-                properties=exp, collection=COLLECTION_NAME, uuid=exp_uuid,
+                properties=exp,
+                collection=COLLECTION_NAME,
+                uuid=exp_uuid,
             )
 
         if batch.number_errors > 0:
