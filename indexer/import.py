@@ -1,71 +1,52 @@
 # Imports cleaned state skills data from csv files as Weaviate vectors
 
 import pandas as pd
-import helper
 import weaviate
-import os
-import glob
+import yaml
+import uuid
 
-INPUT_FILES = '/data/skills/*.csv'
+INPUT_FILE = "./indexer/data/experiences.yml"
+COLLECTION_NAME = "Experience"
 
-client = weaviate.Client("http://localhost:8080")
+client = weaviate.connect_to_local()
 client.timeout_config = (3, 200)
 
-# empty schema and create new schema
-# client.schema.delete_all()
-# schema = { add schema here }
-#
-# client.schema.create(schema)
 
-def add_skills(data, batch_size=512, debug_mode=False):
-    """ upload skills to Weaviate
+def add_experiences(data):
+    """upload professional experience to Weaviate
 
-    :param data: skills data in panda dataframe object
-    :type data: panda dataframe object (4 columns: 'subject', 'root_skill', 'skill', 'skill_description')
-    :param batch_size: number of data objects to put in one batch, defaults to 512
-    :type batch_size: int, optional
-    :param debug_mode: set to True if you want to display upload errors, defaults to False
-    :type debug_mode: bool, optional
+    :param data: experiences data in panda dataframe object
+    :type data: panda dataframe object (2 columns: 'description', 'job')
     """
+    with client.batch.dynamic() as batch:
+        for index, row in data.iterrows():
+            exp = row.to_dict()
+            print("Adding experience:", exp)
 
-    no_items_in_batch = 0
+            exp_uuid = str(
+                uuid.uuid5(uuid.NAMESPACE_DNS, row["job"] + str(row["exp_id"]))
+            )
+            batch.add_object(
+                properties=exp,
+                collection=COLLECTION_NAME,
+                uuid=exp_uuid,
+            )
 
-    for index, row in data.iterrows():
-        skill_object = {
-            "subject": row["subject"],
-            "root_skill": row["root_skill"],
-            "skill": row["skill"],
-            "skill_description": row["skill_description"]
-        }
+        if batch.number_errors > 0:
+            print(f"Errors: {batch.number_errors}")
+            print("Failed Objects: ", batch.failed_objects)
 
-        skill_uuid = helper.generate_uuid('skill', row["skill"])
+    message = str(index + 1) + " / " + str(data.shape[0]) + " items imported"
+    print(message)
 
-        client.batch.add_data_object(skill_object, "Skill", skill_uuid)
-        no_items_in_batch += 1
 
-        if no_items_in_batch >= batch_size:
-            results = client.batch.create_objects()
+with open(INPUT_FILE, "r") as file:
+    yaml_data = yaml.safe_load(file)
+experiences_data = yaml_data.get("experiences", [])
+exps = pd.DataFrame(experiences_data)
 
-            if debug_mode:
-                for result in results:
-                    if result['result'] != {}:
-                        helper.log(result['result'])
+try:
+    add_experiences(exps)
 
-                message = str(index) + ' / ' + str(data.shape[0]) +  ' items imported'
-                helper.log(message)
-
-            no_items_in_batch = 0
-
-    message =  str(data.shape[0]) +  ' items imported'
-    helper.log(message)
-
-    results = client.batch.create_objects()
-    for result in results:
-        if result['result'] != {}:
-            helper.log(result['result'])
-
-csv_files = glob.glob(helper.from_root_dir(INPUT_FILES))
-
-for f in csv_files:
-    df = pd.read_csv(f)
-    add_skills(df.head(4000), batch_size=99, debug_mode=True)
+finally:
+    client.close()

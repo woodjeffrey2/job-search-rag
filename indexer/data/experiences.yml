@@ -1,0 +1,103 @@
+experiences:
+  - exp_id: 1
+    description: Helped grow a newly formed Varsity Tutors for Schools team from a small experiment to help address the COVID learning gap  into one of the  major pillars of the business, providing learning resources for over 2 million students today.
+    job: varsity
+  - exp_id: 2
+    description: Designed core systems and data architecture.
+    job: varsity
+  - exp_id: 3
+    description: Mentored junior developers and led major initiatives.
+    job: varsity
+  - exp_id: 4
+    description: Worked closely with leadership from other teams on company-wide initiatives and cross-team efforts.
+    job: varsity
+  - exp_id: 5
+    description: Collaborated with the AI team on a R.A.G. approach for identifying curriculum-specific skills covered in recorded tutoring sessions.
+    job: varsity
+  - exp_id: 6
+    description: Lead search for a company-wide API documentation solution.
+    job: varsity
+  - exp_id: 7
+    description: Helped establish Kafka eventing standards.
+    job: varsity
+  - exp_id: 8
+    description: Designed AWS Step Functions orchestration workflow to automate error-prone manual processes.
+    job: varsity
+  - exp_id: 9
+    description: Designed and implemented CDC Outbox pattern for data extraction using Kafka and Debezium.
+    job: varsity
+  - exp_id: 10
+    description: Established team standards for REST and GraphQL API design.
+    job: varsity
+  - exp_id: 11
+    description: Created CI/CD pipelines for services and established best practices.
+    job: varsity
+  - exp_id: 12
+    description: Established best practices for unit and integration testing.
+    job: varsity
+  - exp_id: 13
+    description: Started a push towards integration testing serverless applications with ephemeral stacks instead of local emulation.
+    job: varsity
+  - exp_id: 14
+    description: Designed alerting and monitoring architecture for AWS RDS instances and Aurora Clusters
+    job: varsity
+  - exp_id: 15
+    description: Provided estimates and timelines for new work to product and management.
+    job: varsity
+  - exp_id: 16
+    description: Helped plan 2-week sprints with product and management.
+    job: varsity
+  - exp_id: 17
+    description: Led cross-functional teams of 4-8 engineers
+    job: varsity
+  - exp_id: 18
+    description: Designed high level architecture for larger initiatives and broke down work into smaller chunks to hand out to Senior engineers.
+    job: varsity
+  - exp_id: 19
+    description: Worked cross-functionally with product managers, team leads, management, infrastructure, and data engineering to design API, service, and data architecture from product requirements.
+    job: varsity
+  - exp_id: 20
+    description: Worked with product managers to identify technical challenges in prospective features, propose alternatives, and evaluate cost / benefit of different workstreams.
+    job: varsity
+  - exp_id: 21
+    description: Early Engineering team member who helped lead a tiny startup through a period of rapid growth and scaling to unicorn status.
+    job: uniteus
+  - exp_id: 22
+    description: Subject Matter Expert (SME) for authentication, SSO, and user provisioning.
+    job: uniteus
+  - exp_id: 23
+    description: Designed, implemented, and integrated OAuth2, SAML SSO, SAML JIT and SCIM user provisioning systems for syncing hundreds of thousands of external users across domains.
+    job: uniteus
+  - exp_id: 24
+    description: Mentored engineers, led technical discussions, and designed performant production systems.
+    job: uniteus
+  - exp_id: 25
+    description: Built AWS Lambda architecture for automated EHR data transfer.
+    job: uniteus
+  - exp_id: 26
+    description: Worked with MD and PHD PIs to build applications for Biomedical Informatics research including Breast Cancer risk calculation, patient education, augmented reality,  and wearable devices.
+    job: columbia
+  - exp_id: 27
+    description: Collaborated with Data Scientists to analyze study data.
+    job: columbia
+  - exp_id: 28
+    description: Worked with MDs and PHDs to build  patient and clinician systems for research studies.
+    job: hopkins
+  - exp_id: 29
+    description: Implemented machine learning algorithms and trained models for static data analysis and real-time use in systems.
+    job: hopkins
+  - exp_id: 30
+    description: Collaborated with Data Scientists to analyze study data.
+    job: hopkins
+  - exp_id: 31
+    description: Wrote articles for publication submissions and participated in the peer review process
+    job: hopkins
+  - exp_id: 32
+    description: Presented research at conferences across the U.S., Europe, and South America.
+    job: hopkins
+  - exp_id: 33
+    description: Worked with Kaiser Permanente leadership and solutions architects to design an integration to provision and sync 600k users.
+    job: uniteus
+  - exp_id: 34
+    description: Worked with Epic to pilot and provide feedback on a new API for integrating with social determinants of health platforms and provide bi-directional ref.
+    job: uniteus
