@@ -39,10 +39,10 @@ def add_experiences(data):
 with open(INPUT_FILE, "r") as file:
     yaml_data = yaml.safe_load(file)
 experiences_data = yaml_data.get("experiences", [])
-df = pd.DataFrame(experiences_data)
+exps = pd.DataFrame(experiences_data)
 
 try:
-    add_experiences(df)
+    add_experiences(exps)
 
 finally:
     client.close()

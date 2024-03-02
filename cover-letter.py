@@ -1,52 +1,91 @@
-from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
+import pandas as pd
+import weaviate
+import weaviate.classes as wvc
+import yaml
 
-VARCHILD_QUOTES = [
-    "Those mewling Barbarians will cower before my righteous steel!",
-    "The 'fabled' Order of Stromgald is cast to the four winds, lost for all time. I, for one, give them no thought.",
-    "Birds know no borders! Why, then, should we?",
-    "Even the basest creatures may serve a purpose. Still, their lives need be only as long as the paths we tread.",
-    "Fool Never believe they're dead until you see the body",
-    "Martyrs are cheaper than mercenaries, and a far better investment.",
-    "Let Balduvia burn to warm Kjeldor's hearth!",
-    "Let them send their legions I will show them that my truth is stronger than their swords.",
-    "Loyalty to coin alone is loyalty nonetheless.",
-    "Every patch of land must belong to Kjeldor, no matter what the cost!",
-    "Teach by example. If your students do not survive, they were not worth the lesson.",
-    "Direct confrontation never was to the Orcs' taste.",
-    "What Barbarian secrets do they spy from their lofty perch?",
-]
+MAX_EXPERIENCES = 5
+COLLECTION_NAME = "Experience"
+JOB_FILE = "./indexer/data/job.yml"
 
-# Use langchain to query GPT with context (hardcoded) for testing
-def question_gpt(question):
+
+def generate_cover_letter(client, job):
+  """use Weaviate's generative-openai module to prompt GPT to generate a cover letter
+
+  :param client: Weaviate client to use for generative search
+  :type client: WeaviateClient (V4)
+  :param job: information about the job the cover letter is for
+  :type job: panda dataframe row object (4 columns: 'company', 'position', 'role_description', 'requirements')
+  """
   try:
-      load_dotenv()
-      template = """You are a fictional character from the card game Magic: The Gathering named {character}.
-      Answer the following question using your characteristic style as shown in these examples:
-        "{context}"
-
-      Question: {question}
+      job_description = f"""
+      job description:
+      {job["role_description"]}
+      {job["requirements"]}
       """
-      prompt = ChatPromptTemplate.from_template(template)
-      model = ChatOpenAI(model="gpt-3.5-turbo")
+      vector_placeholder = """
+      professional experience:
+      {job} - {description}
+      """
+      instructions = f"""
+      I am an experienced software engineer applying for the {job["position"]} position at {job["company"]} detailed in the job description above.
+      Please write a cover letter for my application that highlights any of my professional experience that seems relevant to the job description.
+      """
+      prompt_template = job_description + vector_placeholder + instructions
+      print(f"Prompt Template: {prompt_template}")
 
-      output_parser = StrOutputParser()
-      chain =  prompt | model | output_parser
+      experiences = client.collections.get(COLLECTION_NAME)
+      response = experiences.generate.near_text(
+          query=job["requirements"],
+          grouped_task=prompt_template,
+          limit=MAX_EXPERIENCES
+      )
+      print(f"Response: {response}")
+      for o in response.objects:
+          print(o.generated)
+          print(o.properties)
 
-      input = {"character": "General Varchild", "context": '"\n\t"'.join(VARCHILD_QUOTES), "question": question}
-      print("Prompt:" + prompt.invoke(input).messages[0].content)
-      answer = chain.invoke(input)
-      print(f"Response: {answer}")
-      return answer
   except Exception as e:
       error_message = f"An error occurred: {str(e)}"
       return error_message
 
-question = "What's the best way to get fluffly scrambled eggs?"
-answer = question_gpt(question)
-# print(f"Answer: {answer}")
+def vector_search(client, query):
+    exps = client.collections.get(COLLECTION_NAME)
+    result = exps.query.near_text(
+            query=query,
+            limit=MAX_EXPERIENCES,
+            return_metadata=wvc.query.MetadataQuery(distance=True)
+           )
+    return result
 
-# # Example Answer
-# ex_ans = "Answer: Fluffy scrambled eggs? Ha! Such trivial matters are beneath the considerations of a mighty leader like myself. However, if you insist on my wisdom, I shall impart it upon you. The key lies in the delicate art of patience and precision. First, crack your eggs with the utmost care, for even the smallest imperfection can spoil the grandeur of your creation. Whisk them vigorously, infusing them with the spirit of resilience. Then, heat your pan to just the right temperature, allowing the eggs to slowly caress its surface. As they begin to solidify, gently push, fold, and stir, sculpting them into clouds of heavenly delight. Remember, a true conqueror of the culinary arts never rushes. Allow your eggs to take their time, for only through patience can they achieve the desired fluffiness. And when the moment is right, serve them with a flourish, for even the simplest of pleasures deserves a touch of grandeur."
+load_dotenv()
+wev = weaviate.connect_to_local()
+question = "What's the best way to get fluffly scrambled eggs?"
+try:
+  with open(JOB_FILE, "r") as file:
+    yaml_data = yaml.safe_load(file)
+
+  job = pd.DataFrame(yaml_data, index=[0])
+  answer = generate_cover_letter(wev, job.iloc[0])
+
+  # Uncomment to test vector search results w/o GPT prompting
+  # query = """
+  # Help lead major projects and take new products from 0->1
+  # Identify the hardest technical and/or quality problems holding us back, and then build solutions
+  # Chart high level technical direction and follow up to make sure those projects come together to deliver on results
+  # Mentor and develop new senior engineers to help grow the team
+  # Ship new features and build infrastructure using: TypeScript, React, CSS, GraphQL, Node.js, and Postgres
+  # At least 6 years of professional software development experience
+  # Experience in a technical leadership role, working cross functionally
+  # Working experience building full stack applications with TypeScript
+  # Working experience building directly for users
+  # You're excited about the future of programming and have experience working with IDEs, terminals, or other common developer tools
+  # You've had previous experience working at a startup in a cross-functional engineering role
+  # """
+  # vecs = vector_search(wev, query)
+  # print(f"Top {MAX_EXPERIENCES} results:")
+  # for o in vecs.objects:
+  #     print(o.properties)
+  #     print(o.metadata.distance)
+finally:
+   wev.close()
